@@ -1,0 +1,12 @@
+2025-10-24 03:58:41 | INFO     | Performing comprehensive health check
+2025-10-24 03:58:42 | INFO     | Health Check: Overall System - CRITICAL - Metrics: {"issue_count": 4, "details": "System resources (WARNING): Memory: 93.7% | MT5 Connection (CRITICAL): Not connected - MT5 not connected | Data Pipeline (WARNING): Low data freshness - 0 bars in last 24h | ML Model (WARNING): No active model loaded"}
+2025-10-24 03:58:42 | WARNING  | Health Issue 1/4: System resources (WARNING): Memory: 93.7%
+2025-10-24 03:58:42 | WARNING  | Health Issue 2/4: MT5 Connection (CRITICAL): Not connected - MT5 not connected
+2025-10-24 03:58:42 | WARNING  | Health Issue 3/4: Data Pipeline (WARNING): Low data freshness - 0 bars in last 24h
+2025-10-24 03:58:42 | WARNING  | Health Issue 4/4: ML Model (WARNING): No active model loaded
+2025-10-24 04:24:22 | INFO     | Performing comprehensive health check
+2025-10-24 04:24:23 | INFO     | Health Check: Overall System - CRITICAL - Metrics: {"issue_count": 4, "details": "System resources (WARNING): Memory: 92.7% | MT5 Connection (CRITICAL): Not connected - MT5 not connected | Data Pipeline (WARNING): Low data freshness - 0 bars in last 24h | ML Model (WARNING): No active model loaded"}
+2025-10-24 04:24:23 | WARNING  | Health Issue 1/4: System resources (WARNING): Memory: 92.7%
+2025-10-24 04:24:23 | WARNING  | Health Issue 2/4: MT5 Connection (CRITICAL): Not connected - MT5 not connected
+2025-10-24 04:24:23 | WARNING  | Health Issue 3/4: Data Pipeline (WARNING): Low data freshness - 0 bars in last 24h
+2025-10-24 04:24:23 | WARNING  | Health Issue 4/4: ML Model (WARNING): No active model loaded

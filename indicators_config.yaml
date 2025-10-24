@@ -1,0 +1,136 @@
+# Technical Indicators Configuration
+# This file defines parameters for all technical indicators used in the analysis
+
+technical_indicators:
+  
+  # Trend Indicators
+  trend:
+    moving_averages:
+      ema_fast:
+        period: 20
+        weight: 0.15
+      ema_slow:
+        period: 50
+        weight: 0.15
+      sma_long:
+        period: 200
+        weight: 0.10
+    
+    macd:
+      fast_period: 12
+      slow_period: 26
+      signal_period: 9
+      weight: 0.20
+    
+    adx:
+      period: 14
+      threshold: 25
+      weight: 0.15
+    
+    ichimoku:
+      tenkan: 9
+      kijun: 26
+      senkou_b: 52
+      weight: 0.10
+  
+  # Momentum Indicators
+  momentum:
+    rsi:
+      period: 14
+      overbought: 70
+      oversold: 30
+      weight: 0.20
+    
+    stochastic:
+      k_period: 14
+      d_period: 3
+      smooth: 3
+      overbought: 80
+      oversold: 20
+      weight: 0.15
+    
+    cci:
+      period: 20
+      overbought: 100
+      oversold: -100
+      weight: 0.10
+    
+    williams_r:
+      period: 14
+      overbought: -20
+      oversold: -80
+      weight: 0.10
+  
+  # Volatility Indicators
+  volatility:
+    bollinger_bands:
+      period: 20
+      std_dev: 2.0
+      weight: 0.15
+    
+    atr:
+      period: 14
+      weight: 0.15
+    
+    keltner_channels:
+      period: 20
+      atr_multiplier: 2.0
+      weight: 0.10
+  
+  # Volume Indicators
+  volume:
+    volume_profile:
+      bins: 24
+      weight: 0.20
+    
+    obv:
+      weight: 0.20
+    
+    vwap:
+      weight: 0.20
+    
+    mfi:
+      period: 14
+      overbought: 80
+      oversold: 20
+      weight: 0.15
+
+# Signal interpretation thresholds
+signal_thresholds:
+  strong_bullish: 0.75
+  bullish: 0.60
+  neutral_upper: 0.55
+  neutral_lower: 0.45
+  bearish: 0.40
+  strong_bearish: 0.25
+
+# Indicator combination rules
+combination_rules:
+  require_trend_confirmation: true
+  require_momentum_alignment: true
+  min_agreeing_indicators: 3
+  
+  # Divergence detection
+  divergence:
+    enabled: true
+    lookback_bars: 50
+    weight_multiplier: 1.5
+
+# Multi-timeframe analysis
+multi_timeframe:
+  enabled: true
+  timeframes:
+    M15:
+      weight: 0.15
+      indicators: ["rsi", "macd", "ema"]
+    H1:
+      weight: 0.25
+      indicators: ["rsi", "macd", "ema", "bollinger", "vwap"]
+    H4:
+      weight: 0.30
+      indicators: ["rsi", "macd", "adx", "ichimoku", "atr"]
+    D1:
+      weight: 0.30
+      indicators: ["rsi", "macd", "adx", "sma_long", "volume_profile"]
+  
+  alignment_bonus: 0.15  # Bonus weight when all timeframes align

@@ -1,0 +1,28 @@
+# Streamlit Configuration
+# Fixes Windows file watcher issues with multiple drives
+
+[server]
+# Disable file watcher to prevent "Paths don't have the same drive" error
+fileWatcherType = "none"
+
+# Server settings
+port = 8501
+headless = true
+runOnSave = false
+
+[browser]
+# Don't automatically open browser
+gatherUsageStats = false
+
+[theme]
+# Dark theme
+primaryColor = "#FF4B4B"
+backgroundColor = "#0E1117"
+secondaryBackgroundColor = "#262730"
+textColor = "#FAFAFA"
+font = "sans serif"
+
+[logger]
+# Reduce console spam
+level = "error"
+messageFormat = "%(asctime)s %(message)s"

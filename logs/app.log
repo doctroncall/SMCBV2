@@ -1,0 +1,27 @@
+2025-10-24 03:58:28 | INFO     | src.utils.logger:setup:112 - Logging initialized for MT5Bot
+2025-10-24 03:58:40 | INFO     | src.utils.logger:info:147 - Initializing bot components
+2025-10-24 03:58:40 | INFO     | src.utils.logger:info:147 - Components initialized successfully
+2025-10-24 03:58:41 | INFO     | src.utils.logger:info:147 - Performing comprehensive health check
+2025-10-24 03:58:42 | INFO     | src.utils.logger:info:147 - Health Check: Overall System - CRITICAL - Metrics: {"issue_count": 4, "details": "System resources (WARNING): Memory: 93.7% | MT5 Connection (CRITICAL): Not connected - MT5 not connected | Data Pipeline (WARNING): Low data freshness - 0 bars in last 24h | ML Model (WARNING): No active model loaded"}
+2025-10-24 03:58:42 | WARNING  | src.utils.logger:warning:151 - Health Issue 1/4: System resources (WARNING): Memory: 93.7%
+2025-10-24 03:58:42 | WARNING  | src.utils.logger:warning:151 - Health Issue 2/4: MT5 Connection (CRITICAL): Not connected - MT5 not connected
+2025-10-24 03:58:42 | WARNING  | src.utils.logger:warning:151 - Health Issue 3/4: Data Pipeline (WARNING): Low data freshness - 0 bars in last 24h
+2025-10-24 03:58:42 | WARNING  | src.utils.logger:warning:151 - Health Issue 4/4: ML Model (WARNING): No active model loaded
+2025-10-24 04:24:09 | INFO     | src.utils.logger:setup:112 - Logging initialized for MT5Bot
+2025-10-24 04:24:22 | INFO     | src.utils.logger:info:147 - Initializing bot components
+2025-10-24 04:24:22 | INFO     | src.utils.logger:info:147 - Components initialized successfully
+2025-10-24 04:24:22 | INFO     | src.utils.logger:info:147 - Performing comprehensive health check
+2025-10-24 04:24:23 | INFO     | src.utils.logger:info:147 - Health Check: Overall System - CRITICAL - Metrics: {"issue_count": 4, "details": "System resources (WARNING): Memory: 92.7% | MT5 Connection (CRITICAL): Not connected - MT5 not connected | Data Pipeline (WARNING): Low data freshness - 0 bars in last 24h | ML Model (WARNING): No active model loaded"}
+2025-10-24 04:24:23 | WARNING  | src.utils.logger:warning:151 - Health Issue 1/4: System resources (WARNING): Memory: 92.7%
+2025-10-24 04:24:23 | WARNING  | src.utils.logger:warning:151 - Health Issue 2/4: MT5 Connection (CRITICAL): Not connected - MT5 not connected
+2025-10-24 04:24:23 | WARNING  | src.utils.logger:warning:151 - Health Issue 3/4: Data Pipeline (WARNING): Low data freshness - 0 bars in last 24h
+2025-10-24 04:24:23 | WARNING  | src.utils.logger:warning:151 - Health Issue 4/4: ML Model (WARNING): No active model loaded
+2025-10-24 04:31:25 | INFO     | src.utils.logger:setup:112 - Logging initialized for MT5Bot
+2025-10-24 04:31:34 | INFO     | src.utils.logger:info:147 - Initializing bot components
+2025-10-24 04:31:34 | INFO     | src.utils.logger:info:147 - Components initialized successfully
+2025-10-24 04:31:34 | INFO     | src.utils.logger:info:147 - Performing comprehensive health check
+2025-10-24 04:31:35 | INFO     | src.utils.logger:info:147 - Health Check: Overall System - CRITICAL - Metrics: {"issue_count": 4, "details": "System resources (WARNING): Memory: 88.7% | MT5 Connection (CRITICAL): Not connected - MT5 not connected | Data Pipeline (WARNING): Low data freshness - 0 bars in last 24h | ML Model (WARNING): No active model loaded"}
+2025-10-24 04:31:35 | WARNING  | src.utils.logger:warning:151 - Health Issue 1/4: System resources (WARNING): Memory: 88.7%
+2025-10-24 04:31:35 | WARNING  | src.utils.logger:warning:151 - Health Issue 2/4: MT5 Connection (CRITICAL): Not connected - MT5 not connected
+2025-10-24 04:31:35 | WARNING  | src.utils.logger:warning:151 - Health Issue 3/4: Data Pipeline (WARNING): Low data freshness - 0 bars in last 24h
+2025-10-24 04:31:35 | WARNING  | src.utils.logger:warning:151 - Health Issue 4/4: ML Model (WARNING): No active model loaded

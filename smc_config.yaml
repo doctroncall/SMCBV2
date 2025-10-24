@@ -1,0 +1,220 @@
+# Smart Money Concepts Configuration
+# Parameters for SMC-based market analysis
+
+market_structure:
+  swing_detection:
+    lookback_left: 5
+    lookback_right: 5
+    min_swing_size_pips: 15
+  
+  structure_breaks:
+    bos:  # Break of Structure
+      confirmation_candles: 1
+      min_break_pips: 10
+      weight: 0.25
+    
+    choch:  # Change of Character
+      confirmation_candles: 2
+      min_break_pips: 15
+      weight: 0.30
+  
+  trend_classification:
+    min_structure_points: 3
+    hhhl_threshold: 0.7  # Higher Highs Higher Lows
+    llhl_threshold: 0.7  # Lower Lows Lower Highs
+
+order_blocks:
+  identification:
+    min_body_percentage: 0.6
+    min_volume_multiplier: 1.5
+    max_wicks_percentage: 0.3
+  
+  strength_scoring:
+    volume_weight: 0.30
+    rejection_weight: 0.25
+    retest_weight: 0.25
+    freshness_weight: 0.20
+  
+  validity:
+    max_touches: 3
+    proximity_pips: 20
+    expiry_bars: 100
+  
+  types:
+    bullish:
+      color: "#10B981"
+      min_strength: 0.6
+      weight: 0.30
+    
+    bearish:
+      color: "#EF4444"
+      min_strength: 0.6
+      weight: 0.30
+    
+    breaker:
+      color: "#F59E0B"
+      min_strength: 0.5
+      weight: 0.20
+
+fair_value_gaps:
+  detection:
+    min_gap_pips: 10
+    max_gap_pips: 200
+    require_momentum: true
+  
+  status:
+    unfilled_threshold: 0.1  # < 10% filled
+    partial_threshold: 0.5   # < 50% filled
+    filled_threshold: 0.9    # > 90% filled
+  
+  priority:
+    unfilled_weight: 0.35
+    partially_filled_weight: 0.20
+    filled_weight: 0.05
+  
+  expiry:
+    bars_without_retest: 50
+    max_age_bars: 200
+
+liquidity:
+  pools:
+    equal_highs_lows:
+      max_pip_difference: 5
+      min_touches: 2
+      lookback_bars: 100
+      weight: 0.25
+    
+    stop_hunts:
+      wick_to_body_ratio: 2.0
+      min_wick_pips: 15
+      confirmation_bars: 2
+      weight: 0.30
+    
+    round_numbers:
+      enabled: true
+      intervals: [50, 100]  # pips
+      proximity_pips: 10
+      weight: 0.15
+  
+  targeting:
+    high_priority_weight: 0.30
+    medium_priority_weight: 0.20
+    low_priority_weight: 0.10
+
+supply_demand:
+  zones:
+    identification:
+      min_rally_decline_percentage: 1.0
+      base_consolidation_bars: 3
+      max_base_bars: 20
+      min_leave_momentum: 1.5
+    
+    strength:
+      fresh_zone_multiplier: 1.5
+      tested_once_multiplier: 1.0
+      tested_multiple_multiplier: 0.7
+      old_zone_multiplier: 0.5
+    
+    validity:
+      max_touches: 3
+      proximity_pips: 15
+      max_age_bars: 200
+  
+  types:
+    demand:
+      color: "#10B981"
+      weight: 0.25
+    
+    supply:
+      color: "#EF4444"
+      weight: 0.25
+    
+    flip_zone:
+      color: "#F59E0B"
+      weight: 0.20
+
+premium_discount:
+  fibonacci_levels:
+    premium_high: 0.705  # -0.705 (above equilibrium)
+    premium_low: 0.618   # -0.618
+    equilibrium: 0.5     # -0.5 (50%)
+    discount_high: 0.382 # -0.382
+    discount_low: 0.236  # -0.236 (below equilibrium)
+  
+  zone_classification:
+    premium:
+      threshold: 0.618
+      sentiment: "bearish"
+      weight: 0.20
+    
+    equilibrium:
+      upper: 0.618
+      lower: 0.382
+      sentiment: "neutral"
+      weight: 0.10
+    
+    discount:
+      threshold: 0.382
+      sentiment: "bullish"
+      weight: 0.20
+  
+  range_calculation:
+    lookback_bars: 50
+    use_swing_high_low: true
+
+inducement:
+  detection:
+    min_liquidity_level: 0.6
+    proximity_to_structure: 20  # pips
+    fake_out_bars: 3
+    weight: 0.15
+  
+  types:
+    buy_side: "bearish_trap"
+    sell_side: "bullish_trap"
+
+mitigation:
+  blocks:
+    min_size_pips: 20
+    max_retest_bars: 50
+    confirmation_bars: 2
+    weight: 0.15
+
+# SMC Sentiment Scoring
+sentiment_weights:
+  market_structure: 0.25
+  order_blocks: 0.20
+  fair_value_gaps: 0.15
+  liquidity: 0.15
+  supply_demand: 0.15
+  premium_discount: 0.10
+
+# Confluence detection
+confluence:
+  enabled: true
+  min_factors: 2
+  bonus_multiplier: 1.3
+  
+  combinations:
+    - ["order_block", "fvg"]
+    - ["order_block", "liquidity"]
+    - ["supply_demand", "premium_discount"]
+    - ["market_structure", "order_block"]
+
+# Advanced features
+advanced:
+  institutional_candles:
+    enabled: true
+    min_body_to_range_ratio: 0.7
+    min_volume_multiplier: 2.0
+  
+  smart_money_divergence:
+    enabled: true
+    lookback_bars: 30
+    min_divergence_strength: 0.6
+  
+  session_analysis:
+    enabled: true
+    asian: { start: "00:00", end: "09:00", weight: 0.8 }
+    london: { start: "08:00", end: "17:00", weight: 1.2 }
+    new_york: { start: "13:00", end: "22:00", weight: 1.0 }
