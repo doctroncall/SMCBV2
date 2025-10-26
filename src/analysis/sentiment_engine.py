@@ -114,10 +114,11 @@ class SentimentEngine:
             )
             
             # v2.0: Adjust confidence based on regime favorability
+            regime_multiplier = 1.0
             if regime_data and self.regime_config.USE_REGIME_POSITION_SIZING:
                 favorability = regime_data['composite']['favorability']
-                multiplier = self.regime_config.REGIME_SIZE_MULTIPLIERS.get(favorability, 1.0)
-                confidence = confidence * multiplier
+                regime_multiplier = self.regime_config.REGIME_SIZE_MULTIPLIERS.get(favorability, 1.0)
+                confidence = min(confidence * regime_multiplier, 1.0)
             
             # Determine risk level
             risk_level = self._assess_risk_level(
@@ -154,7 +155,7 @@ class SentimentEngine:
                 favorability = regime_data['composite']['favorability']
                 if favorability not in self.regime_config.ALLOWED_REGIMES:
                     result['regime_warning'] = f"⚠️ Current regime ({favorability}) is not in allowed trading regimes"
-                    result['confidence'] = result['confidence'] * 0.5  # Reduce confidence if not in allowed regime
+                    result['confidence'] = min(result['confidence'] * 0.5, 1.0)
             
             self.logger.log_analysis(
                 symbol,

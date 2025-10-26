@@ -99,27 +99,8 @@ class MT5DataFetcher:
         Args:
             connection: MT5Connection instance (optional, uses global MT5 if None)
         """
-        print(f"[DEBUG] MT5DataFetcher.__init__() called")
-        print(f"[DEBUG]   connection parameter = {connection}")
-        print(f"[DEBUG]   Will use: {'Old MT5Connection object' if connection else 'Global MT5 API'}")
-        
-        self.connection = connection  # None means use global MT5 API
+        self.connection = connection
         self.validator = DataValidator()
-        
-        # Check if MT5 is initialized
-        if connection is None:
-            try:
-                _mt5 = _ensure_mt5_imported()
-                terminal_info = _mt5.terminal_info()
-            except ImportError:
-                terminal_info = None
-            print(f"[DEBUG]   Global MT5 terminal_info = {terminal_info}")
-            if terminal_info:
-                print(f"[DEBUG]   ✓ MT5 globally initialized")
-                print(f"[DEBUG]   Terminal: {terminal_info.name}")
-                print(f"[DEBUG]   Company: {terminal_info.company}")
-            else:
-                print(f"[DEBUG]   ✗ MT5 NOT globally initialized!")
         
         # Statistics
         self.stats = {
@@ -224,79 +205,41 @@ class MT5DataFetcher:
         Returns:
             Optional[pd.DataFrame]: OHLCV data or None if failed
         """
-        print(f"[DEBUG] get_ohlcv() START - Symbol: {symbol}, TF: {timeframe}, Count: {count}")
         self.stats["total_requests"] += 1
-        
+
         try:
-            # Check MT5 connection first
             _mt5 = _ensure_mt5_imported()
             terminal_info = _mt5.terminal_info()
-            print(f"[DEBUG]   MT5 terminal_info: {terminal_info is not None}")
             if not terminal_info:
-                print(f"[DEBUG]   ✗ MT5 NOT CONNECTED - Error: {_mt5.last_error()}")
                 self.stats["failed_requests"] += 1
                 return None
-            
-            # Ensure symbol is selected/visible in Market Watch
-            # First, try to find the correct symbol name
+
             correct_symbol = self.find_symbol(symbol)
             if correct_symbol is None:
-                print(f"[DEBUG]   ✗ SYMBOL NOT FOUND: '{symbol}' is not available")
-                print(f"[DEBUG]   Try checking available symbols with mt5.symbols_get()")
-                
-                # Show some available symbols for debugging
-                available = self.get_available_symbols("*FX*")  # Try forex symbols
-                if not available:
-                    available = self.get_available_symbols()  # Try all symbols
-                
-                if available:
-                    print(f"[DEBUG]   Available symbols (first 10): {available[:10]}")
-                
                 self.stats["failed_requests"] += 1
                 return None
-            
-            # Update symbol if we found a different name
+
             if correct_symbol != symbol:
-                print(f"[DEBUG]   Using symbol: {correct_symbol} (instead of {symbol})")
                 symbol = correct_symbol
             
-            # Check if symbol needs to be selected
             info = _mt5.symbol_info(symbol)
             if info is None or not info.visible:
-                print(f"[DEBUG]   Symbol {symbol} not visible. Attempting to select...")
                 if not _mt5.symbol_select(symbol, True):
-                    error = _mt5.last_error()
-                    print(f"[DEBUG]   ✗ SYMBOL SELECT FAILED - MT5 Error: {error}")
-                    print(f"[DEBUG]   This usually means the symbol is not available in your broker's Market Watch")
-                    print(f"[DEBUG]   Please check if the symbol exists in your MT5 terminal")
                     self.stats["failed_requests"] += 1
                     return None
-                else:
-                    print(f"[DEBUG]   ✓ Symbol {symbol} selected")
 
-            # Convert timeframe string to MT5 constant
-            print(f"[DEBUG]   Converting timeframe: {timeframe}")
             tf = Timeframe.from_string(timeframe)
-            print(f"[DEBUG]   ✓ Timeframe value: {tf.value}")
-            
-            # Get data
-            print(f"[DEBUG]   Calling mt5.copy_rates_from_pos({symbol}, {tf.value}, 0, {count})")
+
             if start_date and end_date:
                 rates = _mt5.copy_rates_range(symbol, tf.value, start_date, end_date)
             elif start_date:
                 rates = _mt5.copy_rates_from(symbol, tf.value, start_date, count)
             else:
                 rates = _mt5.copy_rates_from_pos(symbol, tf.value, 0, count)
-            
-            print(f"[DEBUG]   Result type: {type(rates)}, Length: {len(rates) if rates is not None else 0}")
-            
+
             if rates is None or len(rates) == 0:
-                error = _mt5.last_error()
-                print(f"[DEBUG]   ✗ FETCH FAILED - MT5 Error: {error}")
                 self.stats["failed_requests"] += 1
                 return None
-            
-            print(f"[DEBUG]   ✓ Successfully fetched {len(rates)} rates")
             
             # Convert to DataFrame
             df = pd.DataFrame(rates)
@@ -435,45 +378,33 @@ class MT5DataFetcher:
         """
         try:
             _mt5 = _ensure_mt5_imported()
-            # First try exact match
             info = _mt5.symbol_info(symbol)
             if info is not None:
                 return symbol
-            
-            # Try to find similar symbols
-            print(f"[DEBUG]   Searching for symbols matching '{symbol}'...")
+
             all_symbols = _mt5.symbols_get()
             if all_symbols is None:
                 return None
-            
-            # Look for symbols containing the search term
+
             matches = []
             symbol_upper = symbol.upper()
-            
+
             for s in all_symbols:
                 s_name_upper = s.name.upper()
-                # Exact match (case-insensitive)
                 if s_name_upper == symbol_upper:
-                    matches.append((s.name, 0))  # Priority 0 (highest)
-                # Starts with the symbol
+                    matches.append((s.name, 0))
                 elif s_name_upper.startswith(symbol_upper):
-                    matches.append((s.name, 1))  # Priority 1
-                # Contains the symbol
+                    matches.append((s.name, 1))
                 elif symbol_upper in s_name_upper:
-                    matches.append((s.name, 2))  # Priority 2
-            
+                    matches.append((s.name, 2))
+
             if matches:
-                # Sort by priority and return the best match
                 matches.sort(key=lambda x: x[1])
-                print(f"[DEBUG]   Found {len(matches)} matching symbols:")
-                for name, priority in matches[:5]:  # Show top 5
-                    print(f"[DEBUG]     - {name}")
                 return matches[0][0]
-            
+
             return None
-            
-        except Exception as e:
-            print(f"[DEBUG]   Error finding symbol: {str(e)}")
+
+        except Exception:
             return None
     
     def get_available_symbols(self, group: str = "*") -> List[str]:

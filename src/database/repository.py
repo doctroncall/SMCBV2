@@ -150,7 +150,9 @@ class DatabaseRepository:
         symbol = self.get_symbol(symbol_name)
         if not symbol:
             return pd.DataFrame()
-        
+
+        limit = max(1, min(limit, 10000))
+
         query = self.session.query(Candle).filter(
             and_(
                 Candle.symbol_id == symbol.id,

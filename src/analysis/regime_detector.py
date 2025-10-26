@@ -120,7 +120,8 @@ class RegimeDetector:
         # Price efficiency (trending vs choppy)
         price_change = abs(df['Close'].iloc[-1] - df['Close'].iloc[-lookback])
         path_length = df['Close'].diff().abs().iloc[-lookback:].sum()
-        efficiency = price_change / path_length if path_length > 0 else 0
+        min_threshold = 0.0001
+        efficiency = price_change / path_length if path_length > min_threshold else 0
         
         # Determine regime
         is_trending = adx > 25
@@ -215,23 +216,23 @@ class RegimeDetector:
     ) -> Dict[str, Any]:
         """
         Detect volume regime
-        
+
         Uses:
         - Volume vs moving average
         - Volume percentiles
         - OBV trend
-        
+
         Returns:
             Dict with volume regime details
         """
-        if 'Volume' not in df.columns:
+        if 'Volume' not in df.columns or len(df) < lookback:
             return {
                 'regime': VolumeRegime.NORMAL.value,
                 'relative_volume': 1.0,
                 'percentile': 0.5,
                 'obv_trend': 'NEUTRAL'
             }
-        
+
         current_volume = df['Volume'].iloc[-1]
         volume_ma = df['Volume'].iloc[-lookback:].mean()
         relative_volume = current_volume / volume_ma if volume_ma > 0 else 1.0

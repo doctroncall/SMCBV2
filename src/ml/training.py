@@ -156,18 +156,14 @@ class ModelTrainer:
                 X, y,
                 test_size=self.config.TEST_SIZE,
                 random_state=self.config.RANDOM_STATE,
-                shuffle=False  # Don't shuffle for time-series data
+                shuffle=False
             )
-            
-            # Scale features
-            X_train_scaled = self.scaler.fit_transform(X_train)
-            X_test_scaled = self.scaler.transform(X_test)
-            
-            # Class balancing
+
+            # Class balancing BEFORE scaling
             if use_class_balancing and SMOTE_AVAILABLE:
                 try:
                     smote = SMOTE(random_state=self.config.RANDOM_STATE, k_neighbors=5)
-                    X_train_scaled, y_train = smote.fit_resample(X_train_scaled, y_train)
+                    X_train, y_train = smote.fit_resample(X_train, y_train)
                     self.logger.info(
                         f"Applied SMOTE: {len(y_train)} samples after balancing",
                         category="ml_training"
@@ -175,6 +171,10 @@ class ModelTrainer:
                 except Exception as e:
                     self.logger.warning(f"SMOTE failed: {e}, using class weights instead", category="ml_training")
                     use_class_balancing = False
+
+            # Scale features AFTER balancing
+            X_train_scaled = self.scaler.fit_transform(X_train)
+            X_test_scaled = self.scaler.transform(X_test)
             
             # Calculate class weights
             class_weights = compute_class_weight(

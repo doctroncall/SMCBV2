@@ -187,7 +187,7 @@ class MT5Connection:
     def disconnect(self) -> bool:
         """
         Disconnect from MetaTrader 5
-        
+
         Returns:
             bool: True if disconnected successfully
         """
@@ -195,6 +195,7 @@ class MT5Connection:
             if mt5 is not None:
                 mt5.shutdown()
             self._connected = False
+            self._last_connection_time = None
             return True
         except Exception as e:
             self._last_error = f"Error during disconnect: {str(e)}"
